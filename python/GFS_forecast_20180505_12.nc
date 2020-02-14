@@ -1,0 +1,1 @@
+/home/swift/SWIFT_GFS_plotting/GFS_NWP/2018050512/GFS_forecast_20180505_12.nc
