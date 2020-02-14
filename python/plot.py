@@ -12,11 +12,7 @@
 #                     as part of the SWIFT GFS python plotting repository. Jobs are then run in
 #                     parallel by submitting to a pool.
 #
-# Revision History  :
-#
-# Usage             : Can be used as part of wider plotting repository or independently e.g.
-#                     "python3 CAPE_CIN.py time lat lon lat lon"
-#                     where time is in the initialisation time in the form YYYYMMDDHH 
+# Revision History  : Feb 2020 - for sharing of GFS_plotting ihub repository
 ###################################################################################################
 
 # worker function that submits the commands to be processed in the background
@@ -42,7 +38,7 @@ if __name__ == "__main__":
 
 # define working and current directory
 
-   diri = "/nfs/a37/earajr/SWIFT/CaseStudies/plot_py"
+   diri = os.environ['SWIFT_GFS']
    image_diri = diri+'/MARTIN'
 
    if not (os.path.isdir(image_diri)):
@@ -53,7 +49,7 @@ if __name__ == "__main__":
 
 # Read namelist and extract initiation times, vars, levels and regions
    
-   a = open(diri+"/namelist")
+   a = open(diri+"controls/namelist")
    content = a.readlines()
 
    init_dt = ((next((s for s in content if "init" in s), None)).rstrip().split(":"))[1].split(",")
@@ -65,7 +61,7 @@ if __name__ == "__main__":
 # loop through namelist contents and create directory structure for images and list of commands
 
    for i in range(len(region)):
-      b = open(diri+"/domains")
+      b = open(diri+"controls/domains")
       domains_content = b.readlines()
 
       lat_lon = ((next((s for s in domains_content if region[i].lstrip() in s), None)).rstrip().split(":"))[1].split(",")
@@ -88,16 +84,6 @@ if __name__ == "__main__":
             m_lev_vars2 = split_m_lev_vars[0].lstrip()
             levs = split_m_lev_vars[1:]
             print(region[i])
-#            if region[i].strip() == "EA":
-#               if "850" in levs:
-#                  levs.remove("850")
-#               if "650" in levs:
-#                  levs.remove("650")
-#            else:
-#               if "800" in levs:
-#                  levs.remove("800")
-#               if "600" in levs:
-#                  levs.remove("600")
                
             for l in range(len(levs)):
                if not (os.path.isdir(image_diri+'/GFS'+'/'+region[i].lstrip()+'/'+init_dt[j].lstrip()+'/'+m_lev_vars2+'_'+levs[l].lstrip())):

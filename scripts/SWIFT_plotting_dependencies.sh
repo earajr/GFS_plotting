@@ -9,7 +9,7 @@ fi
 
 sudo yum install epel-release
 sudo yum groupinstall "Development tools"
-sudo yum install ftp wget unzip m4 curl libcurl-devel cmake3 python-devel python3-devel openjpeg2-tools zlib zlib-devel
+sudo yum install ftp wget unzip m4 curl libcurl-devel cmake3 python-devel python3-devel openjpeg2-tools zlib zlib-devel ImageMagick-devel
 
 #   download, compile and install --> hdf5
 cd $SWIFT_GFS_path
