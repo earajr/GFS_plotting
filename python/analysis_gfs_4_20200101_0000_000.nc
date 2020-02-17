@@ -1,0 +1,1 @@
+/home/swift/SWIFT_GFS_plotting/GFS_NWP/2020010100/analysis_gfs_4_20200101_0000_000.nc
