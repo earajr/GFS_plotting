@@ -25,12 +25,14 @@ import sys
 import os
 import datetime
 
+GFS_dir = os.environ['SWIFT_GFS']
+
 #####################################################################################################
 # Main script
 
 # read in domains and accept lat and lon limits as arguments
 
-b = open(diri+"/domains")
+b = open(GFS_dir+"/controls/domains")
 domains_content = b.readlines()
 
 key_list = []

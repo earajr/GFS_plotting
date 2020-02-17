@@ -27,6 +27,8 @@ import sys
 import os
 import datetime
 
+GFS_dir = os.environ['SWIFT_GFS']
+
 #####################################################################################################
 
 #  9-point smoother function, required to make the geopotential contours look better.
@@ -92,7 +94,7 @@ lev2 = "925"
 # accept initialisation time and dates as argument and identify forecast time index for heat low calculation
 
 init_dt = (sys.argv[1])
-fili = "GFS_48h_forecast_%s_%s.nc" % (init_dt[:8], init_dt[8:10])
+fili = "GFS_forecast_%s_%s.nc" % (init_dt[:8], init_dt[8:10])
 if init_dt[8:10] == "00":
    t_index = [1, 9]
    f_time = [6, 30]
@@ -123,7 +125,7 @@ lev2_index = levs_p.index(lev2)
 
 # read in domains and accept lat and lon limits as arguments
 
-b = open(diri+"/domains")
+b = open(GFS_dir+"/controls/domains")
 domains_content = b.readlines()
 
 key_list = []
@@ -438,4 +440,4 @@ if region == "WA" or region == "unknownWA":
 elif region == "EA" or region == "unknownEA":
    os.system('mogrify -resize 600x733 *'+region+'_*DPandHL_2M_SNGL_'+init_dt[0:10]+'*.png')
 
-os.system('mv *'+region+'_*DPandHL_2M_SNGL_'+init_dt[0:10]+'*.png MARTIN/GFS/'+region+'/'+init_dt[0:10]+'/dewpoint_HL')
+os.system('mv *'+region+'_*DPandHL_2M_SNGL_'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/dewpoint_HL')

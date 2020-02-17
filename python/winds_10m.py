@@ -26,6 +26,8 @@ import sys
 import os
 import datetime
 
+GFS_dir = os.environ['SWIFT_GFS']
+
 ###################################################################################################
 
 # Main script to plot 10m winds
@@ -36,7 +38,8 @@ diri = (os.getcwd())+"/"
 
 # forecast times (currently set to plot 0 to 48 hours)
 
-fore = np.arange(3,73,3)
+fore = (os.popen("cat %s/controls/namelist | grep 'fore:' | awk -F: '{print $2}' | tr ',' ' '"%(GFS_dir))).read().split()
+fore = [np.int(f) for f in fore]
 
 # accept initialisation time and level as arguments
 
@@ -44,7 +47,7 @@ init_dt = (sys.argv[1])
 
 # read in domains and accept lat and lon limits as arguments
 
-b = open(diri+"/domains")
+b = open(GFS_dir+"/controls/domains")
 domains_content = b.readlines()
 
 key_list = []
@@ -317,7 +320,7 @@ del vcres
 
 # open forecast file
 
-f_fili = "GFS_48h_forecast_%s_%s.nc" % (init_dt[:8], init_dt[8:10])
+f_fili = "GFS_forecast_%s_%s.nc" % (init_dt[:8], init_dt[8:10])
 forecast = nio.open_file(diri+f_fili)
 
 # loop through forecast times
@@ -467,7 +470,7 @@ if region == "WA" or region == "unknownWA":
 elif region == "EA" or region == "unknownEA":
    os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
 
-os.system('mv *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png MARTIN/GFS/'+region+'/'+init_dt[0:10]+'/winds10m')
+os.system('mv *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/winds10m')
 
 os.system('mogrify -trim *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
 if region == "WA" or region == "unknownWA":
@@ -475,4 +478,4 @@ if region == "WA" or region == "unknownWA":
 elif region == "EA" or region == "unknownEA":
    os.system('mogrify -resize 600x733 *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
 
-os.system('mv *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png MARTIN/GFS/'+region+'/'+init_dt[0:10]+'/winds10m')
+os.system('mv *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/winds10m')
