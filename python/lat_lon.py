@@ -30,7 +30,7 @@ import datetime
 
 # read in domains and accept lat and lon limits as arguments
 
-b = open(diri+"/domains")
+b = open(GFS_dir+"/controls/domains")
 domains_content = b.readlines()
 
 key_list = []
