@@ -112,7 +112,7 @@ Anaconda will now begin to unpack into your chosen directory. Once complete you 
 
 `source ~/.bashrc`
 
-## pyn_env environment
+### pyn_env environment
 
 We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines. This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The yaml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
 
