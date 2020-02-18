@@ -20,13 +20,13 @@ Once you have created this directory you should set an environment variable in y
 
 ## Dependencies
 
-There are a number of dependencies that you will need to make sure are installed properly on your system. Within the repository there is a `SWIFT_plotting_dependencies.sh` script which will install all the software that is required. This has been tested on a clean CentOS 7 install and works. If you are using a different Linux OS then you will have to modify the script accordingly. Despite the install procedure being different, the dependencies will be the same. The software that is installed is detailed below.
+There are a number of dependencies that you will need to make sure are installed properly on your system. Within the repository (in the scripts directory) there is a `SWIFT_plotting_dependencies.sh` script which will install all the software that is required. This has been tested on a clean CentOS 7 install and works. If you are using a different Linux OS then you will have to modify the script accordingly. Despite the install procedure being different, the dependencies will be the same. The software that is installed is detailed below.
 
-**epel repository (CentOS, Red Hat Enterprise Linux (RHEL), Scientific Linux, Oracle Linux)**
+### epel repository (CentOS, Red Hat Enterprise Linux (RHEL), Scientific Linux, Oracle Linux)
 
 This is the Extra Packages for Enterprise Linux (EPEL) repository of packages you will have to activate before you can install certain pieces of software using yum in CentOS, (this is not available in other Linux OSs, if any of the software installed using yum is not available for your OS e.g. using apt get in Ubuntu then you will have to find another method of installation such as building the code from source).
 
-**"Development tools"**
+### "Development tools"
 
 This group install will install a number of useful (and required) packages and make sure you have the compilers you will need to build the rest of the required software. The equivalent package in Ubuntu is “build-essentials”.
 
@@ -40,3 +40,19 @@ This group install will install a number of useful (and required) packages and m
 **python-devel**  
 **python3-devel**  
 **openjpeg2-tools**  
+**zlib**  
+**zlib-devel**  
+**hdf5** (with threadsafe and unsupported enabled to allow for using POSIX thread, also built with zlib)  
+**netCDF** (with netCDF 4 enabled)  
+**ncl**  
+**eccodes-devel**  
+**jasper**  
+**cdo**  
+
+### Running the script
+
+When running the `SWIFT_plotting_dependencies.sh` script first make sure that you have internet access and that the script is executable.
+
+`chmod +x SWIFT_plotting_dependencies.sh`
+
+The script will require you to have sudo access, however **do not run the script using sudo**. This affects the make commands and can cause the install of several packages to fail. The script will create an `install` directory in the `GFS_plotting` directory you created earlier (**you must have set the location of this directory as an environment variable**).

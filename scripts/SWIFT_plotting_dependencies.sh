@@ -1,6 +1,8 @@
 #!/bin/bash
 
-SWIFT_GFS_path=~/SWIFT_GFS_plotting/install
+
+
+SWIFT_GFS_path=${SWIFT_GFS}/install
 
 if [ ! -d ${SWIFT_GFS_path} ]
 then
