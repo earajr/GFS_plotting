@@ -104,3 +104,16 @@ Anaconda End User License Agreement
 
 Do you accept the license terms? [yes|no]
 ```
+
+Accept the license terms and select a location to install anaconda. If you are happy for anaconda to be installed in your home directory just press ENTER to confirm the location.
+
+
+Anaconda will now begin to unpack into your chosen directory. Once complete you will be asked whether you wish to initialize anaconda. Enter yes and your .bashrc file will be updated to include the conda initialisation. For this to take effect you will have to open a new console window or source your .bashrc from your current window.
+
+`source ~/.bashrc`
+
+## pyn_env environment
+
+We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines. This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The yaml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
+
+`conda create -f pyn_env.yml`
