@@ -36,6 +36,14 @@ if __name__ == "__main__":
    import os
    import sys
 
+# Select number of cores to run parallel plotting on
+
+   if (sys.argv[1]):
+      if (int(sys.argv[1]) > 0 ):
+         n_cores = sys.argv[1]
+   else:
+      n_cores = 4
+
 # define working and current directory
 
    diri = os.environ['SWIFT_GFS']
@@ -49,7 +57,7 @@ if __name__ == "__main__":
 
 # Read namelist and extract initiation times, vars, levels and regions
    
-   a = open(diri+"controls/namelist")
+   a = open(diri+"/controls/namelist")
    content = a.readlines()
 
    init_dt = ((next((s for s in content if "init" in s), None)).rstrip().split(":"))[1].split(",")
@@ -61,7 +69,7 @@ if __name__ == "__main__":
 # loop through namelist contents and create directory structure for images and list of commands
 
    for i in range(len(region)):
-      b = open(diri+"controls/domains")
+      b = open(diri+"/controls/domains")
       domains_content = b.readlines()
 
       lat_lon = ((next((s for s in domains_content if region[i].lstrip() in s), None)).rstrip().split(":"))[1].split(",")
@@ -107,7 +115,7 @@ if __name__ == "__main__":
                command_temp = {"pyver":"python3", "var":s_lev_vars[k].lstrip()+".py", "time":init_dt[j].lstrip(), "lat1":lat_range[0], "lon1":lon_range[0],"lat2":lat_range[1],"lon2":lon_range[1], "lev":""}
                command.append(command_temp)
 
-   n_cores = 12
+   n_cores = 4
 
    if n_cores > 1:
       print("--pooling starts now--")

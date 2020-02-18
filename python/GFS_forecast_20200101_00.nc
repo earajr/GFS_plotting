@@ -1,1 +1,0 @@
-/home/swift/SWIFT_GFS_plotting/GFS_NWP/2020010100/GFS_forecast_20200101_00.nc
