@@ -76,7 +76,7 @@ Now run the install script.
 
 `./Anaconda3-2019.10-Linux-x86_64.sh`
 
-`Welcome to Anaconda3 2019.10
+```Welcome to Anaconda3 2019.10
 
 
 In order to continue the installation process, please review the license
@@ -101,4 +101,4 @@ Anaconda End User License Agreement
 
 …
 
-Do you accept the license terms? [yes|no]`
+Do you accept the license terms? [yes|no]```
