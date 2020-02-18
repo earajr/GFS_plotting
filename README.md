@@ -30,8 +30,8 @@ This is the Extra Packages for Enterprise Linux (EPEL) repository of packages yo
 
 This group install will install a number of useful (and required) packages and make sure you have the compilers you will need to build the rest of the required software. The equivalent package in Ubuntu is “build-essentials”.
 
-**ftp  
-wget  
+**ftp  **
+**wget  **
 unzip  
 m4  
 curl  
@@ -39,4 +39,4 @@ libcurl-devel
 cmake3  
 python-devel  
 python3-devel  
-openjpeg2-tools  **
+**openjpeg2-tools  **
