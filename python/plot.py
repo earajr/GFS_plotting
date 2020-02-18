@@ -38,7 +38,9 @@ if __name__ == "__main__":
 
 # Select number of cores to run parallel plotting on
 
-   if (sys.argv[1]):
+   print(len(sys.argv))
+
+   if (len(sys.argv) > 1 ):
       if (int(sys.argv[1]) > 0 ):
          n_cores = sys.argv[1]
    else:

@@ -8,7 +8,7 @@ for order in ${dir}/tape/*/
 do
    order=$( basename ${order} )
    cd ${dir}/tape/${order}
-   for fil in ${dir}/${order}/*.tar
+   for fil in ${dir}/tape/${order}/*
    do
       fil=$( basename ${fil} )
       YYYY=${fil:6:4}

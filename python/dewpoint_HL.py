@@ -114,7 +114,9 @@ data = nio.open_file(diri+fili)
 
 # read in pressure levels
 
-levs_p1 = data.variables["lv_ISBL0"]
+level_dim = analysis.variables["HGT_P0_L100_GLL0"].dimensions[0]
+
+levs_p1 = analysis.variables[level_dim]
 levs_p = ['{:.0f}'.format(x) for x in levs_p1[:]/100.0]
 del levs_p1
 

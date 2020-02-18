@@ -465,17 +465,17 @@ for i in range(0, len(fore)):
    del vcres
 
 os.system('mogrify -trim *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png')
 
 os.system('mv *_'+region+'_'+init_dt[0:10]+'_wind10m_SNGL.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/winds10m')
 
 os.system('mogrify -trim *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png')
 
 os.system('mv *'+region+'_*_wind10m_SNGL'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/winds10m')

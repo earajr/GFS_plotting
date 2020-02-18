@@ -143,7 +143,9 @@ a_fili = "analysis_gfs_4_%s_%s00_000.nc" % (init_dt[:8], init_dt[8:10])
 
 analysis = nio.open_file(diri+a_fili)
 
-levs_p1 = analysis.variables["lv_ISBL0"]
+level_dim = analysis.variables["HGT_P0_L100_GLL0"].dimensions[0]
+
+levs_p1 = analysis.variables[level_dim]
 levs_p = ['{:.0f}'.format(x) for x in levs_p1[:]/100.0]
 del levs_p1
 
@@ -493,17 +495,17 @@ for i in range(0, len(fore)):
 # convert images to correct size
 
 os.system('mogrify -trim *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png')
 
 os.system('mv *_'+region+'_'+init_dt[0:10]+'_geopot_'+lev_hPa+'hPa.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/geo_'+lev_hPa)
 
 os.system('mogrify -trim *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
 
 os.system('mv *'+region+'_*geopot_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/geo_'+lev_hPa)

@@ -120,7 +120,9 @@ a_fili = "analysis_gfs_4_%s_%s00_000.nc" % (init_dt[:8], init_dt[8:10])
 
 analysis = nio.open_file(diri+a_fili)
 
-levs_p1 = analysis.variables["lv_ISBL0"]
+level_dim = analysis.variables["UGRD_P0_L100_GLL0"].dimensions[0]
+
+levs_p1 = analysis.variables[level_dim]
 levs_p = ['{:.0f}'.format(x) for x in levs_p1[:]/100.0]
 del levs_p1
 
@@ -211,14 +213,12 @@ else:
       lon_box2 = lontr_idx
       lon = lon_temp[lon_box1:lon_box2]
 
-   print(lon)
-
 # read in winds, checking whether box crosses Greenwich Meridian.
 
-if (np.sign(lonbl) + np.sign(lontr)) >= -1 and (np.sign(lonbl) + np.sign(lontr)) <= 1:
+lev_index_low = lev_index-1
+lev_index_hi = lev_index+1
 
-   lev_index_low = lev_index-1
-   lev_index_hi = lev_index+1
+if (np.sign(lonbl) + np.sign(lontr)) >= -1 and (np.sign(lonbl) + np.sign(lontr)) <= 1:
 
    u1 = analysis.variables["UGRD_P0_L100_GLL0"][lev_index_low:lev_index_hi+1,:,:]
    u_temp1 = u1[:,lat_box1:lat_box2,0:lon_box1]
@@ -531,18 +531,18 @@ for i in range(0, len(fore)):
    del res
 
 os.system('mogrify -trim *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png')
 
 os.system('mv *_'+region+'_'+init_dt[0:10]+'_PV_'+lev_hPa+'hPa.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/pv_'+lev_hPa)
 
 os.system('mogrify -trim *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png')
 
 os.system('mv *'+region+'_*_PV_'+lev_hPa+'hPa_'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/pv_'+lev_hPa)
 

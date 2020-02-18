@@ -119,4 +119,4 @@ for colour in colours:
    del res
 
    os.system('mogrify -trim map_'+colour+'_'+region+'.png')
-   os.system('mogrify -resize 1350x900 map_'+colour+'_'+region+'.png')
+#   os.system('mogrify -resize 1350x900 map_'+colour+'_'+region+'.png')

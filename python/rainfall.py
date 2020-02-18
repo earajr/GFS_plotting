@@ -194,9 +194,11 @@ for i in range(0, len(fore)):
 
 # read in PRATE, checking whether box crosses Greenwich Meridian.
 
+   var_name = [key for key in forecast.variables.keys() if "PRATE" in key][0]
+
    if (np.sign(lonbl) + np.sign(lontr)) >= -1 and (np.sign(lonbl) + np.sign(lontr)) <= 1:
 
-      PRATE1 = forecast.variables["PRATE_P0_L1_GLL0_avg"][i,:,:]*3600.0
+      PRATE1 = forecast.variables[var_name][i,:,:]*3600.0
       PRATE_temp1 = PRATE1[lat_box1:lat_box2,0:lon_box1]
       PRATE_temp2 = PRATE1[lat_box1:lat_box2,lon_box2:lon_box3]
       PRATE = np.concatenate((PRATE_temp2,PRATE_temp1),axis=1)
@@ -206,7 +208,7 @@ for i in range(0, len(fore)):
 
    else:
 
-      PRATE1 = forecast.variables["PRATE_P0_L1_GLL0_avg"][i,:,:]*3600.0
+      PRATE1 = forecast.variables[var_name][i,:,:]*3600.0
       PRATE = PRATE1[lat_box1:lat_box2,lon_box1:lon_box2]
       del PRATE1
 
@@ -299,9 +301,9 @@ for i in range(0, len(fore)):
    del PRATE
 
 os.system('mogrify -trim *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png')
-if region == "WA" or region == "unknownWA":
-   os.system('mogrify -resize 886x600 *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png')
-elif region == "EA" or region == "unknownEA":
-   os.system('mogrify -resize 600x733 *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png')
+#if region == "WA" or region == "unknownWA":
+#   os.system('mogrify -resize 886x600 *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png')
+#elif region == "EA" or region == "unknownEA":
+#   os.system('mogrify -resize 600x733 *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png')
 
 os.system('mv *'+region+'_*PRATE_SNGL_'+init_dt[0:10]+'*.png %s/MARTIN/GFS/'%(GFS_dir)+region+'/'+init_dt[0:10]+'/rainfall')

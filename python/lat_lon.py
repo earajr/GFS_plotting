@@ -25,6 +25,8 @@ import sys
 import os
 import datetime
 
+GFS_dir = os.environ['SWIFT_GFS']
+
 #####################################################################################################
 # Main script
 
@@ -117,11 +119,13 @@ for colour in colours:
    ngl.destroy(wks)
    del res
 
-   if region == "WA" or region == "unknownWA":
-      os.system('mogrify -trim grid_'+colour+'_'+region+'.png')
-      os.system('mogrify -resize 886x600 grid_'+colour+'_'+region+'.png')
-   elif region == "EA" or region == "unknownEA":
-      os.system('mogrify -trim grid_'+colour+'_'+region+'.png')
-      os.system('mogrify -resize 600x733 grid_'+colour+'_'+region+'.png')
+   os.system('mogrify -trim grid_'+colour+'_'+region+'.png')
+
+#   if region == "WA" or region == "unknownWA":
+#      os.system('mogrify -trim grid_'+colour+'_'+region+'.png')
+#      os.system('mogrify -resize 886x600 grid_'+colour+'_'+region+'.png')
+#   elif region == "EA" or region == "unknownEA":
+#      os.system('mogrify -trim grid_'+colour+'_'+region+'.png')
+#      os.system('mogrify -resize 600x733 grid_'+colour+'_'+region+'.png')
 
 
