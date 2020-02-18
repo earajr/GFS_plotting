@@ -56,3 +56,49 @@ When running the `SWIFT_plotting_dependencies.sh` script first make sure that yo
 `chmod +x SWIFT_plotting_dependencies.sh`
 
 The script will require you to have sudo access, however **do not run the script using sudo**. This affects the make commands and can cause the install of several packages to fail. The script will create an `install` directory in the `GFS_plotting` directory you created earlier (**you must have set the location of this directory as an environment variable**).
+
+`./SWIFT_plotting_dependencies.sh`
+
+While running there will be several prompts, some of these will ask for your sudo password while others will merely ask you to agree to the installations being made. As the script can take quite a while to install everything you might be asked for your sudo password more than once. The installation of hdf5 in particular takes a while, try to remember to keep an eye out for the sudo password prompt, if you leave it too long the script times out and quits without completing.
+
+##Python
+To run the python code there are a number of python library dependencies. To make sure that we have everything that we need it makes sense to set up a virtual environment in which to run the plotting code. Here I will describe how to do this using anaconda. However, if you are familiar and confident with another method of setting up a virtual environment feel free to do that.
+
+###anaconda
+To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a link labelled “downloads”. Click on this link and scroll down. You should see two options to download the python 3 and python 2 versions of anaconda. Select the python three version and download the installer.
+
+
+Navigate the location of the installer script. Before being able to install anaconda you need to make sure that the script is executable.
+
+`chmod +x Anaconda3-2019.10-Linux-x86_64.sh`
+
+Now run the install script.
+
+`./Anaconda3-2019.10-Linux-x86_64.sh`
+
+`Welcome to Anaconda3 2019.10
+
+
+In order to continue the installation process, please review the license
+
+agreement.
+
+Please, press ENTER to continue
+
+>>>
+
+===================================
+
+Anaconda End User License Agreement
+
+===================================
+
+…
+
+…
+
+…
+
+…
+
+Do you accept the license terms? [yes|no]`
