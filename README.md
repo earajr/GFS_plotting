@@ -10,7 +10,7 @@ To begin with you should first clone the GitHub repository to do this navigate t
 `git clone git@github.com:earajr/GFS_plotting.git`
 
 
-This should create a new directory named GFS_plotting. If for any reason this does not work then you can visit the repository online at https://github.com/earajr/GFS_plotting. On the right hand side of the screen you should see an option to download a zipped version of the repository. Once downloaded you can unzip the repository and rename the directory from GFS_plotting-master to GFS_plotting. This is the exact same repository that you get by using the command above.
+This should create a new directory named GFS_plotting. If for any reason this does not work then you click the "clone or download" button above and select to download a zipped version. Once downloaded you can unzip the repository and rename the directory from GFS_plotting-master to GFS_plotting. This is the exact same repository that you get by using the command above.
 
 
 Once you have created this directory you should set an environment variable in your .bashrc file that describes the location of this directory. This will be important when running scripts later on.
