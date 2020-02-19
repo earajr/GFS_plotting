@@ -70,10 +70,9 @@ While running there will be several prompts, some of these will ask for your sud
 To run the python code there are a number of python library dependencies. To make sure that we have everything that we need it makes sense to set up a virtual environment in which to run the plotting code. Here I will describe how to do this using anaconda. However, if you are familiar and confident with another method of setting up a virtual environment feel free to do that.
 
 ### anaconda
-To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a link labelled “downloads”. Click on this link and scroll down. You should see two options to download the python 3 and python 2 versions of anaconda. Select the python three version and download the installer.
+To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a link labelled “Download”. Click on this link and scroll down. You should see two options to download the python 3 and python 2 versions of anaconda. Select the python 3 version and download the installer.
 
-
-Navigate the location of the installer script. Before being able to install anaconda you need to make sure that the script is executable.
+Navigate to the location of the installer script. Before being able to install anaconda you need to make sure that the script is executable.
 
 `chmod +x Anaconda3-2019.10-Linux-x86_64.sh`
 
@@ -112,14 +111,13 @@ Do you accept the license terms? [yes|no]
 
 Accept the license terms and select a location to install anaconda. If you are happy for anaconda to be installed in your home directory just press ENTER to confirm the location.
 
-
 Anaconda will now begin to unpack into your chosen directory. Once complete you will be asked whether you wish to initialize anaconda. Enter yes and your .bashrc file will be updated to include the conda initialisation. For this to take effect you will have to open a new console window or source your .bashrc from your current window.
 
 `source ~/.bashrc`
 
 ### pyn_env environment
 
-We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines. This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The yaml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
+We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines (in the `scripts` directory). This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The .yml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
 
 `conda create -f pyn_env.yml`
 
@@ -149,6 +147,78 @@ You should now be ready to move onto acquiring GFS data and attempting to create
 
 ## Downloading and preprocessing GFS data
 
-Included in the SWIFT GFS plotting repository are scripts for: (1) downloading the latest operational data, (2) downloading archive data and (3) preprocessing the data into netcdf files that are can be easily read by the SWIFT GFS plotting code.
+Included in the `GFS_plotting` repository are scripts for: (1) downloading the latest operational data, (2) downloading archive data and (3) preprocessing the data into netcdf files that are can be easily read by the GFS plotting code.
 
-As before these scripts rely on you having set a SWIFT_GFS environment variable in your .bashrc file. To do this navigate to your home directory and edit your .bashrc file to its location.
+As before these scripts rely on you having set a `SWIFT_GFS` environment variable in your .bashrc file.
+
+### Download latest GFS NWP data
+
+To download the latest available GFS NWP data you can use the provided `get_GFS_operational.sh` script in the scripts directory. This script creates a new directory in your `GFS_plotting` directory called `GFS_NWP`, within this directory another directory for the latest available GFS initialisation time will also be created. On completion this will include all the grib2 files we download. The script uses the information provided in namelist file that can be found in the `controls` directory to determine which forecast times are to be downloaded. If you are running the plotting code operationally you might want to download GFS data as soon as possible. This can sometimes mean that (if there is a delay in the production of GFS, as sometimes happens) the files will not be present to download. To mitigate this problem the script has been designed to check that all expected files are present. If there are any files missing it will create a new FTP download script and wait 5 minutes before attempting to download the missing files. This occurs a maximum of 25 times at which point at least 2 hours will have passed (not including download times) and all GFS files you might want should be available.
+
+To run the script navigate to the `scripts` directory and attempt to download the latest available GFS data. Before running the script, open it and make sure to edit the email entry to your email address. This is used by the NCEP NOAA ftp server in place of a password, it is not used for any other purpose but the ftp server will reject a connection that attempts to access data with an empty password field. The download will take some time (depending on your internet speed) and you will see the progress of the downloads as each new download starts. It will look something like this.
+
+`./get_GFS_operational.sh`
+
+```
+Connected to ftp.ncep.noaa.gov (140.90.101.48).
+220-******************************************************************
+220-                 **WARNING**WARNING**WARNING**
+220-This is a United States (Agency) computer system, which may be accessed
+220-and used only for official Government business by authorized personnel.
+220-Unauthorized access or use of this computer system may subject violators
+220-to criminal, civil, and/or administrative action.
+220-All information on this computer system may be intercepted, recorded,
+220-read, copied, and disclosed by and to authorized personnel for official
+220-purposes, including criminal investigations. Access or use of this
+220-computer system by any person whether authorized or unauthorized,
+220-constitutes consent to these terms.
+220-                **WARNING**WARNING**WARNING**
+220-******************************************************************
+220-
+220 
+331 Please specify the password.
+230 Login successful.
+200 Switching to Binary mode.
+Interactive mode off.
+250 Directory successfully changed.
+250 Directory successfully changed.
+250 Directory successfully changed.
+local: gfs.t06z.pgrb2.0p50.f000 remote: gfs.t06z.pgrb2.0p50.f000
+227 Entering Passive Mode (140,90,101,48,19,219).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f000 (89991066 bytes).
+89991066 bytes received in 10.2 secs (8792.53 Kbytes/sec)
+local: gfs.t06z.pgrb2.0p50.f003 remote: gfs.t06z.pgrb2.0p50.f003
+227 Entering Passive Mode (140,90,101,48,21,198).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f003 (97934603 bytes).
+97934603 bytes received in 15.7 secs (6229.33 Kbytes/sec)
+local: gfs.t06z.pgrb2.0p50.f006 remote: gfs.t06z.pgrb2.0p50.f006
+227 Entering Passive Mode (140,90,101,48,28,248).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f006 (99217334 bytes).
+226 Transfer complete.
+99217334 bytes received in 15.8 secs (6268.40 Kbytes/sec)
+…
+…
+…
+… 
+local: gfs.t06z.pgrb2.0p50.f063 remote: gfs.t06z.pgrb2.0p50.f063
+227 Entering Passive Mode (140,90,101,48,128,48).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f063 (99094605 bytes).
+226 Transfer complete.
+99094605 bytes received in 17.2 secs (5765.24 Kbytes/sec)
+local: gfs.t06z.pgrb2.0p50.f066 remote: gfs.t06z.pgrb2.0p50.f066
+227 Entering Passive Mode (140,90,101,48,130,119).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f066 (97657812 bytes).
+226 Transfer complete.
+97657812 bytes received in 13.9 secs (7015.87 Kbytes/sec)
+local: gfs.t06z.pgrb2.0p50.f069 remote: gfs.t06z.pgrb2.0p50.f069
+227 Entering Passive Mode (140,90,101,48,134,77).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f069 (99036649 bytes).
+226 Transfer complete.
+99036649 bytes received in 14.4 secs (6893.28 Kbytes/sec)
+local: gfs.t06z.pgrb2.0p50.f072 remote: gfs.t06z.pgrb2.0p50.f072
+227 Entering Passive Mode (140,90,101,48,144,143).
+150 Opening BINARY mode data connection for gfs.t06z.pgrb2.0p50.f072 (100641438 bytes).
+226 Transfer complete.
+100641438 bytes received in 15.2 secs (6619.75 Kbytes/sec)
+221 Goodbye.
+```
