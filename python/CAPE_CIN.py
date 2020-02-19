@@ -90,8 +90,6 @@ diri = (os.getcwd())+"/"
 fore = (os.popen("cat %s/controls/namelist | grep 'fore:' | awk -F: '{print $2}' | tr ',' ' '"%(GFS_dir))).read().split()
 fore = [np.int(f) for f in fore]
 
-#fore = np.arange(3,73,3)
-
 # accept initialisation time and dates as an argument
 
 init_dt = (sys.argv[1])

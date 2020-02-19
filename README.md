@@ -117,3 +117,33 @@ Anaconda will now begin to unpack into your chosen directory. Once complete you 
 We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines. This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The yaml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
 
 `conda create -f pyn_env.yml`
+
+## GFS plotting scripts
+
+The python plotting scripts can be found in the python directory of your downloaded repository. Broadly speaking these are split into 2 different types of scripts: (1) job creation and parallelisation and (2) data manipulation and image production. These are discussed in more detail below.
+
+### plot.py
+
+The `plot.py` script interrogates the control files (namelist and domains files that can be found in the `controls` directory) to find the initialisation times, multiple and single level variables to be plotted, regions and forecast times. From this information the first step is to produce all the output directories to receive the imagery that is produced. The location of the output is dictated by the `SWIFT_GFS` environment variable set earlier. The next step is to generate a list of dictionaries that contain the commands and arguments that are to be run to produce the GFS imagery. Once complete this list of commands is then passed to a “worker” command via a threadpool. This submits the commands created earlier in parallel to allow for more rapid generation of imagery. The number of cores for the python code to run on is automatically set to 4, however this can be overridden by providing the number of cores you wish to use as an argument to the `plot.py` script.
+
+### Individual plotting scripts
+
+The python scripts that are invoked by `plot.py` are similarly found in the `python` directory. These are a mixture of scripts that work to produce images for a wide variety of forecast relevant meteorological fields. It is imagined that future development of scripts of this type (produced by editing existing code) will allow the plotting of a wider variety of useful metrics. Once created a script of this type can be added to the namelist by adding the name of the script (minus the .py) to the appropriate part of the namelist file. Scripts that work to plot a single level should be included in the single level variables (`s_lev_vars`) section separated by a comma from other variables to be plotted.
+
+`s_lev_vars: CAPE_CIN, dewpoint_HL, mean_vwinds_950_600, mslp`
+
+Variables that can be plotted for multiple pressure levels such as temperature, winds or humidity should be added to the multiple level variables section (`m_lev_vars`), each script name should be followed by the the pressure level it should be plotted on and be seperated from other script titles by a comma.
+
+`m_lev_vars: geo 925 850 650 600 500 200, winds 925 850 700 600 200, streamlines 925 850 700 600, rel_humidity 850 700 500, temperature 500`
+
+Generally the structure of the potting scripts is as follows. The forecast times to be plotted are read from the namelist file in order to describe the forecast loop when plotting. The initialisation time is supplied as an argument. The domains file is read so that the lat and lon values supplied as arguments can be checked and images named appropriately. This is a check that is made as the plotting scripts can be run independently without being invoked by plot.py, if the lat lon values supplied match values in the domains file then the images will be assigned the correct region name, otherwise the images are assigned the region name “unnamedregion”. The analysis file is opened and if a specific pressure level is requested the level dimensions of one of the variables is read. These levels are then compared to the requested level in order to determine the required level indices. The latitude and longitude are read from the analysis file also with modifications made depending on whether the box requested crosses the Greenwich meridian (this prevents contour plots having a discontinuity which shows up as a blank line on plotting). The analysis file is read, any required calculations performed and a plot created. After this a loop is started for repeating this process for the requested forecast times. Once the images have been generated the whitespace around them is trimmed and they are moved to the directories created by plot.py.
+
+The plotting scripts are written using python but are heavily reliant on the pynio and pyngl libraries. These libraries are the pythonised version of NCL. As such anyone with experience writing analysis and plotting code in NCL might be familiar with these sections of code. In particular the creation of a workstation (wks) and the selection of resources that modify the way in which plotting occurs.
+
+You should now be ready to move onto acquiring GFS data and attempting to create plots.
+
+## Downloading and preprocessing GFS data
+
+Included in the SWIFT GFS plotting repository are scripts for: (1) downloading the latest operational data, (2) downloading archive data and (3) preprocessing the data into netcdf files that are can be easily read by the SWIFT GFS plotting code.
+
+As before these scripts rely on you having set a SWIFT_GFS environment variable in your .bashrc file. To do this navigate to your home directory and edit your .bashrc file to its location.

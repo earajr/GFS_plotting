@@ -75,7 +75,6 @@ if __name__ == "__main__":
       domains_content = b.readlines()
 
       lat_lon = ((next((s for s in domains_content if region[i].lstrip() in s), None)).rstrip().split(":"))[1].split(",")
-      print(lat_lon)
 
       lat_range = [lat_lon[0], lat_lon[2]]
       lon_range = [lat_lon[1], lat_lon[3]]
@@ -116,8 +115,6 @@ if __name__ == "__main__":
                command = []
                command_temp = {"pyver":"python3", "var":s_lev_vars[k].lstrip()+".py", "time":init_dt[j].lstrip(), "lat1":lat_range[0], "lon1":lon_range[0],"lat2":lat_range[1],"lon2":lon_range[1], "lev":""}
                command.append(command_temp)
-
-   n_cores = 4
 
    if n_cores > 1:
       print("--pooling starts now--")
