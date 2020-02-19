@@ -210,3 +210,44 @@ local: gfs.t06z.pgrb2.0p50.f072 remote: gfs.t06z.pgrb2.0p50.f072
 100641438 bytes received in 15.2 secs (6619.75 Kbytes/sec)
 221 Goodbye.
 ```
+
+### Download recent archived GFS data
+There is an online archive of GFS data that can be accessed in a similar way to the operational GFS data. These files are hosted online by NOAA (on both ftp and http servers) and can be browsed using this website (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs). In the `GFS_plotting` repository there are a number of scripts supplied that deal with the downloading of archive data. For data that is in the near past (last year or so) the scripts `get_GFS_archived.sh` and `run_get_GFS_archived.sh` are the ones you should use. The `run_get_GFS_archived.sh` script interrogates the initialisation dates and times that you have entered in the `init` variable of the namelist file (found in the `controls` directory). This, in turn runs the `get_GFS_archived.sh` script with the appropriate date and time arguments. This script uses curl to check the existence of the files in the ftp and http archives and if present downloads them and stores them in the same way as discussed earlier. On running the `run_get_GFS_archived.sh` script you should see something like this appear on your console (assuming data is present).
+
+```
+% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 57.4M  100 57.4M    0     0  6473k      0  0:00:09  0:00:09 --:--:-- 13.1M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 62.9M  100 62.9M    0     0  7882k      0  0:00:08  0:00:08 --:--:-- 12.3M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 63.8M  100 63.8M    0     0  9240k      0  0:00:07  0:00:07 --:--:-- 13.8M
+…
+…
+…
+…
+```
+
+If there is data that you are attempting to download that is not in the online archive you will receive a message informing you that your requested data cannot be found. However, this data is likely to be available and you can see if it is on the NOAA tape storage.
+
+### Download older archived GFS data
+
+To browse the available periods go to the NOAA GFS webpage (https://www.ncdc.noaa.gov/data-access/model-data/model-datasets/global-forcast-system-gfs). You should scroll down to the GFS Forecast section of the site and on the right hand side click on the HAS link for the 004/0.5 degree grid (this is in line with the data that the operational data download script downloads). You will then be able to select the initialisation time and dates that you wish to download. Then all you need to do is select the files you wish to download and enter an email address. This email address will be used to inform when your order has been retrieved from tape storage and is ready to download. Be aware that data from the tape archive will be slow to download. This is because the number of forecast times included is significantly higher than the 0-72 period we have been downloading so far (a single initialisation time is ~6 GB of data). Once you have received an email to tell you that your order/orders are ready you can use the `get_GFS_archived_tape.sh` script to download them. To do so you should run the script with all the order numbers you wish to download as arguments.
+
+`/get_GFS_archived_tape.sh HAS011462403 HAS011462405 HAS011462407`
+
+When the files from your order have been downloaded you can run the untarring script (`untar_tape_data.sh`) that is included in the `scripts` directory of the repository. This will untar the forecast files specified in your namelist file and move the resulting files from the order subdirectory of your tape directory into appropriately named initialisation directories in the `GFS_NWP` directory. The order tar files will automatically be deleted on untarring. Therefore, if you wish to produce archive images for a different range of forecast times then you should modify your namelist first.
+
+`./untar_tape_data.sh`
+
+### Converting GRIB2 to netCDF
+
+To make the data easier to access and interrogate outside of the python plotting routines I chose to convert the data into netCDF format. The script to do this is included in the `scripts` directory and is called `convert_GFS.sh`. The script loops through all the directories in the GFS_NWP directory (apart from the tape directory) and first converts the GRIB2 files to netCDFs. Then renames the analysis file, selects the required variables from the files and concatenates all the forecast files into a single netCDF. The selection of a subset of variables was required as an update to the structure of GFS files in 2019 prevented the concatenation of the forecast files. This was due to some forecast files containing variables that were not present in others. It is a quirk of the process that has become necessary to avoid heavily modifying the way in which the python scripts work. In the future I hope to modify the methods used to mean that the GFS forecast files are not subset in this way.
+
+Once this step is complete it marks the end of the preprocessing. You should now see that there are symbolic links present in the python directory which will enable the plotting routines to access the data stored in the `GFS_NWP` subdirectories.
+
+## Using the python plotting scripts
+
+
