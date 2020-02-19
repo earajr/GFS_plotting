@@ -4,7 +4,7 @@ This document gives an overview of the setup required to run the SWIFT GFS pytho
 
 ## GitHub Repository
 
-To begin with you should first clone the GitHub repository to do this navigate to your home directory (or where ever you wish to put the cloned repository) and run the following command.
+To begin with you should first clone the GitHub repository, to do this navigate to your home directory (or where ever you wish to put the cloned repository) and run the following command.
 
 
 `git clone git@github.com:earajr/GFS_plotting.git`
@@ -13,10 +13,14 @@ To begin with you should first clone the GitHub repository to do this navigate t
 This should create a new directory named `GFS_plotting`. If for any reason this does not work then you click the "clone or download" button above and select to download a zipped version. Once downloaded you can unzip the repository and rename the directory from `GFS_plotting-master` to `GFS_plotting`. This is the exact same repository that you get by using the command above.
 
 
-Once you have created this directory you should set an environment variable in your .bashrc file that describes the location of this directory. This will be important when running scripts later on.
+Once you have created this directory you should set an environment variable in your .bashrc file that describes the location of this directory. This will be important when running scripts later on. Open your .bashrc file and specify the location of your new directory as the environment variable `SWIFT_GFS`.
 
 
 `export SWIFT_GFS=full/path/to/GFS_plotting`
+
+Once you have modified your .bashrc source it to update your current console.
+
+`source ~/.bashrc`
 
 ## Dependencies
 
@@ -30,6 +34,7 @@ This is the Extra Packages for Enterprise Linux (EPEL) repository of packages yo
 
 This group install will install a number of useful (and required) packages and make sure you have the compilers you will need to build the rest of the required software. The equivalent package in Ubuntu is “build-essentials”.
 
+### Other software required
 **ftp**  
 **wget**  
 **unzip**  
@@ -55,16 +60,16 @@ When running the `SWIFT_plotting_dependencies.sh` script first make sure that yo
 
 `chmod +x SWIFT_plotting_dependencies.sh`
 
-The script will require you to have sudo access, however **do not run the script using sudo**. This affects the make commands and can cause the install of several packages to fail. The script will create an `install` directory in the `GFS_plotting` directory you created earlier (**you must have set the location of this directory as an environment variable**).
+The script will require you to have sudo access, however **do not run the script using sudo**. This affects the make commands and can cause the install of several packages to fail. The script will create an `install` directory in the `GFS_plotting` directory you created earlier (**you must have set the location of this directory as an environment variable and sourced your updated .bashrc**).
 
 `./SWIFT_plotting_dependencies.sh`
 
 While running there will be several prompts, some of these will ask for your sudo password while others will merely ask you to agree to the installations being made. As the script can take quite a while to install everything you might be asked for your sudo password more than once. The installation of hdf5 in particular takes a while, try to remember to keep an eye out for the sudo password prompt, if you leave it too long the script times out and quits without completing.
 
-##Python
+## Python
 To run the python code there are a number of python library dependencies. To make sure that we have everything that we need it makes sense to set up a virtual environment in which to run the plotting code. Here I will describe how to do this using anaconda. However, if you are familiar and confident with another method of setting up a virtual environment feel free to do that.
 
-###anaconda
+### anaconda
 To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a link labelled “downloads”. Click on this link and scroll down. You should see two options to download the python 3 and python 2 versions of anaconda. Select the python three version and download the installer.
 
 
