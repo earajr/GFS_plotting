@@ -83,29 +83,17 @@ Now run the install script.
 ```
 Welcome to Anaconda3 2019.10
 
-
 In order to continue the installation process, please review the license
-
 agreement.
-
 Please, press ENTER to continue
-
 >>>
-
 ===================================
-
 Anaconda End User License Agreement
-
 ===================================
-
 …
-
 …
-
 …
-
 …
-
 Do you accept the license terms? [yes|no]
 ```
 
