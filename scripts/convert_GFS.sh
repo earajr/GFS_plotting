@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ "$#" -eq  "1" ]
+then
+   SWIFT_GFS=$1
+   echo "${SWIFT_GFS}"
+else
+   echo "Attempting to use existing SWIFT_GFS environment variable"
+fi
+
 cd ${SWIFT_GFS}/GFS_NWP
 
 for date in */
@@ -20,11 +28,13 @@ do
          mv ${file} ${file}.grb2
       done
 
-      /usr/bin/ncl_convert2nc gfs.t${HH}z.pgrb2.0p50.f000.grb2
+      echo $NCARG_ROOT
+      ncl_convert2nc gfs.t${HH}z.pgrb2.0p50.f000.grb2
+      
       mv gfs.t${HH}z.pgrb2.0p50.f000.nc analysis_gfs_4_${YYYY}${MM}${DD}_${HH}00_000.nc
       rm gfs.t${HH}z.pgrb2.0p50.f000.grb2
   
-      /usr/bin/ncl_convert2nc *.grb2
+      ncl_convert2nc *.grb2
       rm *.grb2
       for file in gfs*.nc
       do

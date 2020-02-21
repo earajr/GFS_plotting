@@ -133,6 +133,25 @@ The plotting scripts are written using python but are heavily reliant on the pyn
 
 You should now be ready to move onto acquiring GFS data and attempting to create plots.
 
+## Control files
+The files within the `controls` directory are read by various scripts in order to inform their behaviour. Therefore you should familiarise yourself with what is contained within these files before running any download or preprocessing scripts.
+
+### Domains
+The domains file simply defines the lat lon corners of regions that can be plotted using the python code. The domains file is not interrogated for information until the running of python code, therefore it will not influence the behaviour of the data download or preprocessing scripts.
+
+Domains are described as follows
+
+`Name: lower_Lat, left_Lon, upper_Lat, right_Lon`
+
+e.g. The West Africa domain supplied in the repository
+
+`WA: -2.5, -32.0, 36.0, 28.0`
+
+### Namelist
+In contrast to the domains file the namelist file (also found in the `controls` directory) is used by the data download and preprocessing scripts as a source of information. In particular the date-times of GFS initialisation and the forecast times that are requested are read from the file to inform the downloading of archive data and the untarring data from the tape archive. Therefore, if you change the values of init and fore between downloading your data and running the python code you might find that the data you wish to plot is not available and causes failure of the python plotting scripts.
+
+The namelist file contains 5 categories that can be edited to control the running of the bash and python scripts. These are initialisation time (`init`), multiple level variables (`m_lev_vars`), single level variables (`s_lev_vars`), regions (`region`) and forecast times to be plotted (`fore`). This file allows for a great deal of control on the plotting of GFS data without having to edit any of the python scripts.
+
 ## Downloading and preprocessing GFS data
 
 Included in the `GFS_plotting` repository are scripts for: (1) downloading the latest operational data, (2) downloading archive data and (3) preprocessing the data into netcdf files that are can be easily read by the GFS plotting code.
@@ -246,8 +265,61 @@ When the files from your order have been downloaded you can run the untarring sc
 
 To make the data easier to access and interrogate outside of the python plotting routines I chose to convert the data into netCDF format. The script to do this is included in the `scripts` directory and is called `convert_GFS.sh`. The script loops through all the directories in the GFS_NWP directory (apart from the tape directory) and first converts the GRIB2 files to netCDFs. Then renames the analysis file, selects the required variables from the files and concatenates all the forecast files into a single netCDF. The selection of a subset of variables was required as an update to the structure of GFS files in 2019 prevented the concatenation of the forecast files. This was due to some forecast files containing variables that were not present in others. It is a quirk of the process that has become necessary to avoid heavily modifying the way in which the python scripts work. In the future I hope to modify the methods used to mean that the GFS forecast files are not subset in this way.
 
+`./convert_GFS.sh`
+
 Once this step is complete it marks the end of the preprocessing. You should now see that there are symbolic links present in the python directory which will enable the plotting routines to access the data stored in the `GFS_NWP` subdirectories.
 
 ## Using the python plotting scripts
+
+As already discussed the files within the `controls` directory are read by various scripts in order to influence their behaviour. In particular the `namelist` file controls what data is downloaded from the NCEP archive if running the plotting code for past events and which files are concatenated into the GFS forecast netCDFs. Therefore it is sensible to set up the `namelist` file fully before running any data download or preprocessing steps.
+
+As long as you are not editing the `init` or `fore` fields of the `namelist` file then you can subsequently make decisions on which variables and domains to run the python code for. As mentioned earlier the `namelist` file is read by the `plot.py` script and used to generate all the commands to run the potting scripts in parallel.
+
+Before running the `plot.py` script you should make sure that in the `python` directory you have symbolic links to all the netCDF files you are going to reading data from. Once you are satisfied that this is the case you can activate the conda environment we set up earlier.
+
+`conda activate pyn_env`
+
+Now you can run the `plot.py` script, this will run a number of other python scripts in turn and produce the output images.
+
+`python plot.py`
+
+The `plot.py` script automatically parallelizes the running of the plotting scripts with 4 parallel processes. If you want to alter the number of processes, this can be achieved by including an argument to the `plot.py` command. First you should check the number of CPUs you have available.
+
+`lscpu`
+
+This should show you something like this
+
+```
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                4
+On-line CPU(s) list:   0-3
+Thread(s) per core:    2
+Core(s) per socket:    2
+…
+…
+…
+```
+
+In this case the number of CPUs is 4 so there is no advantage to attempting to run more processes, however on the system I run the GFS plotting on operationally I have 40 CPUs available so I can run the plotting scripts on a much higher number of CPUs and therefore produce them faster.
+
+```
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                40
+On-line CPU(s) list:   0-39
+Thread(s) per core:    2
+Core(s) per socket:    10
+…
+…
+…
+```
+e.g. to run 20 processes in parallel the command looks like this
+
+`python plot.py 20`
+
+Once running the commands that are being run are printed to the screen and there are generally some minor warnings issued by the plotting scripts (don’t worry if your output looks like this).
 
 

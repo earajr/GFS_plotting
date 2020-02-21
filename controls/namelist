@@ -1,4 +1,4 @@
-init: 2018050512, 2020010100, 2020021306
+init: 2020022106
 m_lev_vars: convergence 850, divergence 200, geo 925 850 650 600 500 200, winds 925 850 700 600 200, streamlines 925 850 700 600, theta 925 850, meridional_winds 925 850, rel_vort 925 850 700 600, rel_vort_smooth 925 850 700, dewpoint 925 700 500, rel_humidity 850 700 500, pv 700 200, temperature 500
 s_lev_vars: CAPE_CIN, dewpoint_HL, mean_vwinds_950_600, mslp, PWAT, shear_350_925, shear_650_925, shear_600_800, shear_350_800, rainfall, MD, temp_2m, dewpoint_2m, streamlines_10m, mean_winds_950_850, mean_winds_800_600
 region: WA, EA, TropA

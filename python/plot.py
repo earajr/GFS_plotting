@@ -28,7 +28,7 @@ def worker( x ):
    return  # ({"out":out})
 
 # main function that reads in initiation times from init_dt, variables and levels from m_lev_vars and variables (on single levels) from s_lev_vars
-# commands are then constructed and submitted to a pool to be run in parallel on a user specified number of cores "n_cores"
+# commands are then constructed and submitted to a pool to be run in parallel on a user specified number of cores "n_processes"
 
 if __name__ == "__main__":
    
@@ -38,13 +38,11 @@ if __name__ == "__main__":
 
 # Select number of cores to run parallel plotting on
 
-   print(len(sys.argv))
-
    if (len(sys.argv) > 1 ):
       if (int(sys.argv[1]) > 0 ):
-         n_cores = sys.argv[1]
+         n_processes = sys.argv[1]
    else:
-      n_cores = 4
+      n_processes = 4
 
 # define working and current directory
 
@@ -88,11 +86,9 @@ if __name__ == "__main__":
             os.mkdir(image_diri+'/GFS'+'/'+region[i].lstrip()+'/'+init_dt[j].lstrip())
 
          for k in range(len(m_lev_vars)):
-            print(m_lev_vars[k].split())
             split_m_lev_vars = m_lev_vars[k].split()
             m_lev_vars2 = split_m_lev_vars[0].lstrip()
             levs = split_m_lev_vars[1:]
-            print(region[i])
                
             for l in range(len(levs)):
                if not (os.path.isdir(image_diri+'/GFS'+'/'+region[i].lstrip()+'/'+init_dt[j].lstrip()+'/'+m_lev_vars2+'_'+levs[l].lstrip())):
@@ -116,9 +112,9 @@ if __name__ == "__main__":
                command_temp = {"pyver":"python3", "var":s_lev_vars[k].lstrip()+".py", "time":init_dt[j].lstrip(), "lat1":lat_range[0], "lon1":lon_range[0],"lat2":lat_range[1],"lon2":lon_range[1], "lev":""}
                command.append(command_temp)
 
-   if n_cores > 1:
+   if int(n_processes) >= 1:
       print("--pooling starts now--")
-      pool = Pool( processes=n_cores )
+      pool = Pool( processes=int(n_processes) )
       # Calls the 'worker' function in parallel using the 'par' list. 
       # Each entry will be used once as a task to start a process.
       r = pool.map_async(worker, command)

@@ -3,6 +3,14 @@
 # Script for downloading GFS forecast data (GRIB files).
 #
 
+if [ "$#" -eq  "1" ]
+then
+   SWIFT_GFS=$1
+   echo "${SWIFT_GFS}"
+else
+   echo "Attempting to use existing SWIFT_GFS environment variable"
+fi
+
 #If GFS_NWP directory does not exist create it and navigate to it
 
 if [ ! -d ${SWIFT_GFS}/GFS_NWP ];
