@@ -322,4 +322,99 @@ e.g. to run 20 processes in parallel the command looks like this
 
 Once running the commands that are being run are printed to the screen and there are generally some minor warnings issued by the plotting scripts (don’t worry if your output looks like this).
 
+```
+--pooling starts now--
+Running python3 convergence.py 2018050600 850  -2.5  -32.0  36.0  28.0
+Running python3 geo.py 2018050606 200  -2.5  -32.0  36.0  28.0
+Running python3 streamlines.py 2018050612 850  -2.5  -32.0  36.0  28.0
+Running python3 rel_vort.py 2018050618 925  -2.5  -32.0  36.0  28.0
+warning:tmEqualizeXYSizes is not a valid resource in streamline.PlotManager at this time
+warning:tmEqualizeXYSizes is not a valid resource in contour.PlotManager at this time
+warning:tmEqualizeXYSizes is not a valid resource in contour.PlotManager at this time
+warning:tmEqualizeXYSizes is not a valid resource in contour.PlotManager at this time
+warning:tmEqualizeXYSizes is not a valid resource in streamline.PlotManager at this time
+…
+…
+…
+```
 
+On completion of the scripts running a new directory called MARTIN will have been created which contains all the images you have just produced. The directory structure created here is compatible with the MARTIN executable for viewing and annotating imagery. Therefore if you wish to quickly view the images using MARTIN is a good choice.
+
+## Automating plotting scripts for operational purposes.
+
+### Cron
+
+Cron is a program that enables Unix users to execute commands or scripts automatically at specified times and dates. Cron is a daemon, which means that it only needs to be started once and will then lay dormant until it is required. To specify when you want cron to execute particular jobs you need to give it instructions. The way this is done is through editing a cron config file or crontabs.
+
+On Linux cron is generally automatically installed and opened on startup of the computer. Each username on a computer will have its own crontab which can be edited and will allow that user to automate jobs on the computer.
+
+To view the crontab for your username on your current computer type
+
+`crontab -e`
+
+This should open an empty file (assuming that this is a clean install of CentOS 7 as advised) once open, edit the crontab by entering the lines below (remembering to change the path of the SAFNWC variable to match the location of your safnwc directory and the SAFNWC environment variable in your .bashrc file).
+
+```
+CRON_TZ=UTC
+GFS_SWIFT=/full/path/to/GFS_plotting
+NCARG_ROOT=/usr
+```
+
+The first line specifies that all the times will use Coordinated Universal Time (UTC) rather than local time. The second line defines your `GFS_plotting` environment variable and the third the location of NCL root. The second and third lines are necessary because your crontab runs in a different shell to your normal console. As such it does not share the environment variables for your bash shell that you set up earlier.
+
+When entering a job to be automated to your crontab it will look something like this (do not enter this to your crontab)
+
+`15 10 1 2 * /bin/bash -c "/full/path/to/script/example.sh"`
+
+where the numbers (and stars * as placeholders) represent the control of when a command will be executed. In this example the script would be run on the 15th minute of the 10th hour of the first day of the second month every year. A star in every location means a command would run for every minute of every hour of every day of every month. The 5th place can be used to specify running jobs on particular days of the week. A helpful guide is shown below.
+
+```
+* * * * *  command to execute
+│ │ │ │ │
+│ │ │ │ │
+│ │ │ │ └───── day of week (0 - 6, Sunday to Saturday)
+│ │ │ └────────── month (1 - 12)
+│ │ └─────────────── day of month (1 - 31)
+│ └──────────────────── hour (0 - 23)
+└───────────────────────── min (0 - 59)
+```
+
+There are a huge number of ways in which job initiation times and dates can be specified. A website that I find very useful is https://crontab.guru/ which simply explains what each column does and allows you to input example time controls and see in both plain text and numerical time/dates when a job with that crontab entry would be executed.
+
+The second part of the example line above indicates the command that you want to be executed. In this case using bash to execute the script example.sh. The command here doesn't have to be a script but it is often a good idea to write a script that contains a number of commands and initiate them using a single line in your crontab.
+
+### Automation scripts
+Within the `scripts` directory you will find a sub directory named `automation`. In here you will find a number of scripts that will assist in automation using cron. In this part of the guide I will show you how I have used cron and these scripts to automate the downloading and preprocessing of data, the generation of images and a cleanup routine to remove images and data and prevent them from filling up your hard drive.
+
+### Automating downloads
+The first step that is required before setting up automation is to make sure you are happy with your namelist setup. You should make sure that the correct variables, domains and forecast times are set (don’t worry about initialisation times as this will be reset automatically). Once this has been set you can use the `edit_namelist.sh` script in the `automation` directory to remove any existing initialisation times and add the latest initialisation time to your `namelist` file. After this step has been completed you should then run the `get_GFS_operational.sh` script we discussed earlier. To do this you should open your crontab for editing using the command 
+
+`crontab -e`
+
+and add the following line
+
+`0 4-22/6 * * * /bin/bash -c "${GFS_SWIFT}/scripts/automation/edit_namelist.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/get_GFS_operational.sh ${GFS_SWIFT}"`
+
+This will run the edited `namelist` script and use the `GFS_SWIFT` variable you set in your crontab earlier as an argument to the script. This is required because the crontab runs in a different shell to your usual console and does not have the same environment variables. After the namelist file has been edited the `get_GFS_operational.sh` script is then run and the downloading of the latest available GFS data will occur. This sequence of scripts will be run at 0400, 1000, 1600 and 2200 UTC. This roughly coincides with the delay between GFS initialization and the data being available online.
+
+### Automating preprocessing
+In order to automate the running of the `convert_GFS.sh` script that we discussed earlier we need to add this command to our crontab too. Instead of adding an additional line we should edit the current cron job to include the `convert_GFS.sh` script on the successful completion of the download script. To do this we seperate jobs using `&&` as shown below.
+
+`0 4-22/6 * * * /bin/bash -c "${GFS_SWIFT}/scripts/automation/edit_namelist.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/get_GFS_operational.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/convert_GFS.sh ${GFS_SWIFT}"`
+
+This should generate the netCDF files required to run the python code and produce the images you want.
+
+### Automating python
+In order to run the python code you can use the `run_plotting.sh` script provided in the automation directory. This script relies on the location of your anaconda directory, as such if you have installed anaconda anywhere other than your home directory you will have to modify the script. Here, is also the place where you will have to modify the number of processes you wish to run in parallel. Currently the `plot.py` script has the argument 4, so will specify 4 parallel processes. By changing this number you can increase or decrease the number of processes run simultaneously.
+
+To add the plotting scripts to your cron job you should modify the line we have added so far so that the plotting only commences on the successful completion of the `convert_GFS.sh` script.
+
+`0 4-22/6 * * * /bin/bash -c "${GFS_SWIFT}/scripts/automation/edit_namelist.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/get_GFS_operational.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/convert_GFS.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/automation/run_plotting.sh ${GFS_SWIFT}"`
+
+### Automating cleanup
+
+Finally, to remove GFS files, links and images that are over 3 days old I have included a `cleanup.sh` script. This will prevent your computer hard drives filling up with a large amount of data. I have chosen 3 days as this should provide a reasonable opportunity for earlier forecasts images to be utilised and give users time to copy images to an archive if required. If you wish to modify this you can easily do so by changing the `tim_mins` definition in the `cleanup.sh` script to something that suits your purposes better.
+
+To run the the cleanup script 4 times a day (and remove old data when new data has been processed to replace it) just append the cleanup job to the end of your existing cron job.
+
+`0 4-22/6 * * * /bin/bash -c "${GFS_SWIFT}/scripts/automation/edit_namelist.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/get_GFS_operational.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/convert_GFS.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/automation/run_plotting.sh ${GFS_SWIFT}" && /bin/bash -c "${GFS_SWIFT}/scripts/automation/cleanup.sh ${GFS_SWIFT}"`
