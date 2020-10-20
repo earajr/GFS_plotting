@@ -9,7 +9,7 @@ This document gives an overview of the setup required to run the SWIFT GFS pytho
 To begin with you should first clone the GitHub repository, to do this navigate to your home directory (or where ever you wish to put the cloned repository) and run the following command.
 
 
-`git clone git@github.com:earajr/GFS_plotting.git`
+`git clone https://github.com/earajr/GFS_plotting.git`
 
 
 This should create a new directory named `GFS_plotting`. If for any reason this does not work then you click the "clone or download" button above and select to download a zipped version. Once downloaded you can unzip the repository and rename the directory from `GFS_plotting-master` to `GFS_plotting`. This is the exact same repository that you get by using the command above.
