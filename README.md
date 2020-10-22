@@ -26,35 +26,39 @@ Once you have modified your .bashrc source it to update your current console.
 
 ## Dependencies
 
-There are a number of dependencies that you will need to make sure are installed properly on your system. Within the repository (in the scripts directory) there is a `SWIFT_plotting_dependencies.sh` script which will install all the software that is required. This has been tested on a clean CentOS 7 install and works. If you are using a different Linux OS then you will have to modify the script accordingly. Despite the install procedure being different, the dependencies will be the same. The software that is installed is detailed below.
+There are a number of dependencies that you will need to make sure are installed properly on your system. Within the repository (in the scripts directory) there is a `SWIFT_plotting_dependencies_CentOS.sh` and a `SWIFT_plotting_dependencies_Ubuntu.sh` script these will install all the software that is required for the approriate version of Linux. These has been tested on a clean CentOS 7 and Ubuntu 18 install and works. If you are using a different Linux OS then you will have to modify the script accordingly. Despite the install procedure being different, the dependencies will be the same. The software that is installed is detailed below.
+
 
 ### epel repository (CentOS, Red Hat Enterprise Linux (RHEL), Scientific Linux, Oracle Linux)
 
 This is the Extra Packages for Enterprise Linux (EPEL) repository of packages you will have to activate before you can install certain pieces of software using yum in CentOS, (this is not available in other Linux OSs, if any of the software installed using yum is not available for your OS e.g. using apt get in Ubuntu then you will have to find another method of installation such as building the code from source).
 
-### "Development tools"
+### "Development tools"/"build-essentials"
 
 This group install will install a number of useful (and required) packages and make sure you have the compilers you will need to build the rest of the required software. The equivalent package in Ubuntu is “build-essentials”.
 
 ### Other software required
-**ftp**  
-**wget**  
-**unzip**  
-**m4**  
-**curl**  
-**libcurl-devel**  
-**cmake3**  
-**python-devel**  
-**python3-devel**  
-**openjpeg2-tools**  
-**zlib**  
-**zlib-devel**  
-**hdf5** (with threadsafe and unsupported enabled to allow for using POSIX thread, also built with zlib)  
-**netCDF** (with netCDF 4 enabled)  
-**ncl**  
-**eccodes-devel**  
-**jasper**  
-**cdo**  
+
+|CentOS|Ubuntu|conditions|
+|---|---|---|
+|**ftp**|**ftp**|
+|**wget**|**wget**|
+|**unzip**|**unzip**|
+|**m4**|**m4**|  
+|**curl**|**curl**|  
+|**libcurl-devel**|**libcurl4-openssl-dev**|
+|**cmake3**|**cmake**|
+|**python-devel**|**python-dev**|
+|**python3-devel**|**python3-dev**|
+|**openjpeg2-tools**|**libopenjp2-tools**|
+|**zlib**|**zlib1g**|
+|**zlib-devel**|**zlib1g-dev**|
+|**hdf5**|**hdf5**| (with threadsafe and unsupported enabled to allow for using POSIX thread, also built with zlib) | 
+|**netCDF**|**netCDF**| (with netCDF 4 enabled)  |
+|**ncl**|**ncl**|
+|**eccodes-devel**|**libeccodes-dev**|
+|**jasper**|**jasper**|
+|**cdo**|**cdo**|
 
 ### Running the script
 
@@ -109,7 +113,7 @@ Anaconda will now begin to unpack into your chosen directory. Once complete you 
 
 We could go through the process of setting up a conda environment from scratch. However, instead of doing this I have created a .yml environment file that will replicate the conda environment that I use to run the GFS plotting routines (in the `scripts` directory). This is a simple way of replicating a conda environment so that it should work in exactly the same way as the operational plotting for SWIFT. The .yml file (`pyn_env.yml`) can be used to create a conda environment called pyn_env (pyngl environment). This will provide all the python packages required to create the GFS images.
 
-`conda create -f pyn_env.yml`
+`conda env create -f pyn_env.yml`
 
 ## GFS plotting scripts
 
