@@ -103,7 +103,7 @@ do
    if [ ${flag} == "1" ]
    then
       rm -rf $FTP_BATCH
-      echo ftp -v -n ftp.ncep.noaa.gov \<\< \\FINFTP > $FTP_BATCH
+      echo ftp -p -v -n ftp.ncep.noaa.gov \<\< \\FINFTP > $FTP_BATCH
       echo user anonymous $EMAIL >> $FTP_BATCH
       echo bin >> $FTP_BATCH
       echo prompt >> $FTP_BATCH
