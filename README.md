@@ -41,6 +41,7 @@ This group install will install a number of useful (and required) packages and m
 
 |CentOS|Ubuntu|conditions|
 |---|---|---|
+|**csh**|**csh**|
 |**ftp**|**ftp**|
 |**wget**|**wget**|
 |**unzip**|**unzip**|
