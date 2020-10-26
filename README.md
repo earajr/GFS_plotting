@@ -60,6 +60,8 @@ This group install will install a number of useful (and required) packages and m
 |**eccodes-devel**|**libeccodes-dev**|
 |**jasper**|**jasper**|
 |**cdo**|**cdo**|
+||**gcc-6-base**|
+||**libgfortran3**|
 
 ### Running the script
 
