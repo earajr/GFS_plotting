@@ -64,7 +64,7 @@ RESOL=0p50
 EMAIL="your_email_here"
 
 # echo commands to connect to NCEP to download latest GFS data to the FTP batch file named above make the FTP batch fiel executable and run it
-echo ftp -v -n ftp.ncep.noaa.gov \<\< \\FINFTP > $FTP_BATCH
+echo ftp -p -v -n ftp.ncep.noaa.gov \<\< \\FINFTP > $FTP_BATCH
 echo user anonymous $EMAIL >> $FTP_BATCH
 echo bin >> $FTP_BATCH
 echo prompt >> $FTP_BATCH
