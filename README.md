@@ -79,7 +79,7 @@ While running there will be several prompts, some of these will ask for your sud
 To run the python code there are a number of python library dependencies. To make sure that we have everything that we need it makes sense to set up a virtual environment in which to run the plotting code. Here I will describe how to do this using anaconda. However, if you are familiar and confident with another method of setting up a virtual environment feel free to do that.
 
 ### anaconda
-To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a link labelled “Download”. Click on this link and scroll down. You should see two options to download the python 3 and python 2 versions of anaconda. Select the python 3 version and download the installer.
+To download the anaconda installer script visit the anaconda website (https://www.anaconda.com/). In the top right corner you should see a menu symbol. Fromt he drop down menu select the individual edition and then click download. You should see an option to download a Linux installer for anaconda. Select this and download the installer.
 
 Navigate to the location of the installer script. Before being able to install anaconda you need to make sure that the script is executable.
 
