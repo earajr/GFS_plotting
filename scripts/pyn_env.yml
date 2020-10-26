@@ -1,4 +1,4 @@
-name: base
+name: pyn_env
 channels:
   - defaults
 dependencies:
