@@ -45,6 +45,7 @@ then
    YYYY=`date -u --date='yesterday' +%Y`
    MM=`date -u --date='yesterday' +%m`
    DD=`date -u --date='yesterday' +%d`
+   YYYYMMDD=`date -u --date='yesterday' +%Y%m%d`
    HH="18"
 fi
 
